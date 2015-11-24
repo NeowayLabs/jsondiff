@@ -1,10 +1,10 @@
-package jsonDiff
+package jsondiff
 
 import (
 	"reflect"
 )
 
-func GetJsonDiff(firstJson map[string]interface{}, secondJson map[string]interface{}) []string {
+func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) []string {
 
 	jsonDiff := make([]string, 0)
 

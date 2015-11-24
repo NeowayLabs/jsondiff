@@ -1,4 +1,4 @@
-package jsonDiff
+package jsondiff
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ func TestShouldReturnFieldWhenValuesDiffer(t *testing.T) {
 	}
 
 	expected := []string{"str"}
-	actual := GetJsonDiff(value, value2)
+	actual := Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -33,7 +33,7 @@ func TestShouldReturnEmptyWhenValuesMatch(t *testing.T) {
 	}
 
 	expected := []string{}
-	actual := GetJsonDiff(value, value)
+	actual := Diff(value, value)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -45,7 +45,7 @@ func TestShouldReturnEmptyWhenValuesAreEmpty(t *testing.T) {
 	value2 := map[string]interface{}{}
 
 	expected := []string{}
-	actual := GetJsonDiff(value, value2)
+	actual := Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -65,7 +65,7 @@ func TestShouldReturnFieldWhenTheNumberOfItensDiffer(t *testing.T) {
 	}
 
 	expected := []string{"bool"}
-	actual := GetJsonDiff(value, value2)
+	actual := Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -84,7 +84,7 @@ func TestShoudReturnEmptyWhenValuesMatchAndAreInDifferentOrder(t *testing.T) {
 	}
 
 	expected := []string{}
-	actual := GetJsonDiff(value, value2)
+	actual := Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -103,7 +103,7 @@ func TestShouldReturnFieldWhenThereIsAnArrayThatIsDifferent(t *testing.T) {
 	}
 
 	expected := []string{"str"}
-	actual := GetJsonDiff(value, value2)
+	actual := Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -122,7 +122,7 @@ func TestShouldReturnFieldWhenTheElementsOfAnArrayDoesNotMatch(t *testing.T) {
 	}
 
 	expected := []string{"str"}
-	actual := GetJsonDiff(value, value2)
+	actual := Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -179,7 +179,7 @@ func TestShouldReturnEmptyWhenTheElementsOfAnArrayAreJsonAndMatch(t *testing.T) 
 	json.Unmarshal(byt, &f)
 
 	expected := []string{}
-	actual := GetJsonDiff(f.(map[string]interface{}), f.(map[string]interface{}))
+	actual := Diff(f.(map[string]interface{}), f.(map[string]interface{}))
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -283,7 +283,7 @@ func TestShouldReturnFieldWhenTheElementsOfAnArrayAreJsonAndDoesNotMatch(t *test
 	json.Unmarshal(byt2, &g)
 
 	expected := []string{"socios"}
-	actual := GetJsonDiff(f.(map[string]interface{}), g.(map[string]interface{}))
+	actual := Diff(f.(map[string]interface{}), g.(map[string]interface{}))
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
