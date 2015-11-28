@@ -47,13 +47,13 @@ func compareArray(firstArray []string, secondArray []string) bool {
 		return false
 	}
 
-	for index := 0; index < len(firstArray); index++ {
+	for index, _ := range firstArray {
 		if firstArray[index] != secondArray[index] {
 			return false
 		}
 	}
 
-	for index := 0; index < len(secondArray); index++ {
+	for index, _ := range secondArray {
 		if firstArray[index] != secondArray[index] {
 			return false
 		}
