@@ -53,11 +53,5 @@ func compareArray(firstArray []string, secondArray []string) bool {
 		}
 	}
 
-	for index, _ := range secondArray {
-		if firstArray[index] != secondArray[index] {
-			return false
-		}
-	}
-
 	return true
 }

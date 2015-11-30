@@ -52,7 +52,7 @@ func TestShouldReturnEmptyWhenValuesAreEmpty(t *testing.T) {
 	}
 }
 
-func TestShouldReturnFieldWhenTheNumberOfItensDiffer(t *testing.T) {
+func TestShouldReturnFieldWhenTheSecondJsonHasMoreItens(t *testing.T) {
 	value := map[string]interface{}{
 		"num": 6.13,
 		"str": "a",
@@ -62,6 +62,26 @@ func TestShouldReturnFieldWhenTheNumberOfItensDiffer(t *testing.T) {
 		"num":  6.13,
 		"str":  "a",
 		"bool": true,
+	}
+
+	expected := []string{"bool"}
+	actual := Diff(value, value2)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
+
+func TestShouldReturnFieldWhenTheFirstJsonHasMoreItens(t *testing.T) {
+	value := map[string]interface{}{
+		"num":  6.13,
+		"str":  "a",
+		"bool": true,
+	}
+
+	value2 := map[string]interface{}{
+		"num": 6.13,
+		"str": "a",
 	}
 
 	expected := []string{"bool"}
@@ -110,6 +130,25 @@ func TestShouldReturnFieldWhenThereIsAnArrayThatIsDifferent(t *testing.T) {
 	}
 }
 
+func TestShouldReturnFieldWhenTheSecondArrayHasDifferentElement(t *testing.T) {
+	value := map[string]interface{}{
+		"str": []string{"a", "a"},
+		"num": 6.13,
+	}
+
+	value2 := map[string]interface{}{
+		"str": []string{"a", "b"},
+		"num": 6.13,
+	}
+
+	expected := []string{"str"}
+	actual := Diff(value, value2)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
+
 func TestShouldReturnFieldWhenTheElementsOfAnArrayDoesNotMatch(t *testing.T) {
 	value := map[string]interface{}{
 		"str": []string{"a", "b"},
@@ -122,6 +161,25 @@ func TestShouldReturnFieldWhenTheElementsOfAnArrayDoesNotMatch(t *testing.T) {
 	}
 
 	expected := []string{"str"}
+	actual := Diff(value, value2)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
+
+func TestShouldReturnEmptyWhenTheElementsOfAnArrayMatch(t *testing.T) {
+	value := map[string]interface{}{
+		"str": []string{"a", "b"},
+		"num": 6.13,
+	}
+
+	value2 := map[string]interface{}{
+		"str": []string{"a", "b"},
+		"num": 6.13,
+	}
+
+	expected := []string{}
 	actual := Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
