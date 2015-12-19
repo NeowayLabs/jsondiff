@@ -187,6 +187,78 @@ func TestShouldReturnEmptyWhenTheElementsOfAnArrayMatch(t *testing.T) {
 	}
 }
 
+func TestShouldReturnEmptyWhenTheFieldIsAJsonAndMatch(t *testing.T) {
+	value := map[string]interface{}{
+		"json": map[string]interface{}{
+			"str": "a",
+			"num": 1,
+		},
+	}
+	value2 := map[string]interface{}{
+		"json": map[string]interface{}{
+			"str": "a",
+			"num": 1,
+		},
+	}
+
+	expected := []string{}
+	actual := Diff(value, value2)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
+
+func TestShouldReturnFieldWhenTheFieldIsAJsonAndDoesNotMatch(t *testing.T) {
+	value := map[string]interface{}{
+		"json": map[string]interface{}{
+			"str": "a",
+			"num": 1,
+		},
+	}
+	value2 := map[string]interface{}{
+		"json": map[string]interface{}{
+			"str": "a",
+			"num": 2,
+		},
+	}
+
+	expected := []string{"json"}
+	actual := Diff(value, value2)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
+
+func TestShouldReturnFielsdWhenMoreThanOneFieldAreDifferent(t *testing.T) {
+	value := map[string]interface{}{
+		"json": map[string]interface{}{
+			"str": "a",
+			"num": 1,
+		},
+		"array": []string{"a", "b"},
+		"str":   "a",
+		"num":   1,
+	}
+	value2 := map[string]interface{}{
+		"json": map[string]interface{}{
+			"str": "a",
+			"num": 2,
+		},
+		"array": []string{"a", "c"},
+		"str":   "b",
+		"num":   2,
+	}
+
+	expected := []string{"json", "array", "str", "num"}
+	actual := Diff(value, value2)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
+
 func TestShouldReturnEmptyWhenTheElementsOfAnArrayAreJsonAndMatch(t *testing.T) {
 	byt := []byte(`{
 		"protocolo": "149123123",

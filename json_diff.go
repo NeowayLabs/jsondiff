@@ -20,6 +20,11 @@ func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) [
 				if !reflect.DeepEqual(firstValue, secondValue) {
 					jsonDiff = append(jsonDiff, firstKey)
 				}
+			} else if reflect.TypeOf(firstValue).String() == "map[string]interface {}" {
+				isDifferent := Diff(firstValue.(map[string]interface{}), secondValue.(map[string]interface{}))
+				if len(isDifferent) > 0 {
+					jsonDiff = append(jsonDiff, firstKey)
+				}
 			} else if firstValue != secondValue {
 				jsonDiff = append(jsonDiff, firstKey)
 			}
