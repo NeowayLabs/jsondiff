@@ -2,6 +2,7 @@ package jsondiff
 
 import (
 	"encoding/json"
+	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
@@ -194,15 +195,9 @@ func TestShouldReturnEmptyWhenTheFieldIsAJsonAndMatch(t *testing.T) {
 			"num": 1,
 		},
 	}
-	value2 := map[string]interface{}{
-		"json": map[string]interface{}{
-			"str": "a",
-			"num": 1,
-		},
-	}
 
 	expected := []string{}
-	actual := Diff(value, value2)
+	actual := Diff(value, value)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -251,65 +246,33 @@ func TestShouldReturnFielsdWhenMoreThanOneFieldAreDifferent(t *testing.T) {
 		"num":   2,
 	}
 
-	expected := []string{"json", "array", "str", "num"}
 	actual := Diff(value, value2)
 
-	if !reflect.DeepEqual(expected, actual) {
-		t.Error("Test failed. Expected", expected, "but returned", actual)
-	}
+	assert.Contains(t, actual, "json", "array", "str", "num")
 }
 
 func TestShouldReturnEmptyWhenTheElementsOfAnArrayAreJsonAndMatch(t *testing.T) {
-	byt := []byte(`{
-		"protocolo": "149123123",
-		"cnpj": "110020312312313",
-		"nomeEmpresarial": "INCORPORADORA E EMPREENDIMENTOS LTDA",
-		"naturezaJuridica": "SOCIEDADE ANONIMA FECHADA ",
-		"nire": "2923123123",
-		"arquivamento": "25/07/2014",
-		"inicioAtividade": "1988-02-18",
-		"endereco": "RUA JOSE",
-		"numero": "",
-		"bairro": "ALPHAVILLE",
-		"complemento": "",
-		"municipio": "FAKE",
-		"cep": "123123123",
-		"uf": "SC",
-		"objetoSocial": "ABCD iABCDABCDABCDABCDABCDABCDABCDABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD.",
-		"capital": "10.000.000,00",
-		"capitalIntegralizado": "10.000.000,00",
-		"microEmpresa": "Nao",
-		"prazoDuracao": "Indeterminado",
-		"situacao": "REGISTRO ATIVO",
-		"status": "",
-		"dia": 4,
-		"mes": "Setembro",
-		"ano": 2015,
-		"moedaCapital": "R$",
-		"moedaCapitalIntegralizado": "R$",
-		"socios": [
-		{
-				"nome": "MARIA EDUARDA",
-				"documentoSocio":		"123123123",
-				"valorParticipacao": "10.000.000,00",
-				"tipo": "Sócio Administrador",
-				"descricaoAdministrador": ""
+
+	value := map[string]interface{}{
+		"array": []interface{}{
+			map[string]interface{}{
+				"json": map[string]interface{}{
+					"str": "a",
+					"num": 1,
+				},
+			},
+			map[string]interface{}{
+				"json": map[string]interface{}{
+					"str": "b",
+					"num": 2,
+				},
+			},
 		},
-		{
-				"nome": "TATIANA",
-				"documentoSocio":		"123123123",
-				"valorParticipacao": "10.000.000,00",
-				"tipo": "Sócio Administrador",
-				"descricaoAdministrador": ""
-		}
-		]
-    }`)
-
-	var f interface{}
-	json.Unmarshal(byt, &f)
-
+		"str": "a",
+		"num": 1,
+	}
 	expected := []string{}
-	actual := Diff(f.(map[string]interface{}), f.(map[string]interface{}))
+	actual := Diff(value, value)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
