@@ -1,7 +1,6 @@
 package jsondiff
 
 import (
-	"encoding/json"
 	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
@@ -280,103 +279,32 @@ func TestShouldReturnEmptyWhenTheElementsOfAnArrayAreJsonAndMatch(t *testing.T) 
 }
 
 func TestShouldReturnFieldWhenTheElementsOfAnArrayAreJsonAndDoesNotMatch(t *testing.T) {
-	byt := []byte(`{
-		"protocolo": "149123123",
-		"cnpj": "110020312312313",
-		"nomeEmpresarial": "INCORPORADORA E EMPREENDIMENTOS LTDA",
-		"naturezaJuridica": "SOCIEDADE ANONIMA FECHADA ",
-		"nire": "2923123123",
-		"arquivamento": "25/07/2014",
-		"inicioAtividade": "1988-02-18",
-		"endereco": "RUA JOSE",
-		"numero": "",
-		"bairro": "ALPHAVILLE",
-		"complemento": "",
-		"municipio": "FAKE",
-		"cep": "123123123",
-		"uf": "SC",
-		"objetoSocial": "ABCD iABCDABCDABCDABCDABCDABCDABCDABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD.",
-		"capital": "10.000.000,00",
-		"capitalIntegralizado": "10.000.000,00",
-		"microEmpresa": "Nao",
-		"prazoDuracao": "Indeterminado",
-		"situacao": "REGISTRO ATIVO",
-		"status": "",
-		"dia": 4,
-		"mes": "Setembro",
-		"ano": 2015,
-		"moedaCapital": "R$",
-		"moedaCapitalIntegralizado": "R$",
-		"socios": [
-		{
-				"nome": "MARIA EDUARDA",
-				"documentoSocio":		"123123123",
-				"valorParticipacao": "10.000.000,00",
-				"tipo": "Sócio Administrador",
-				"descricaoAdministrador": ""
+	value := map[string]interface{}{
+		"data": []interface{}{
+			map[string]interface{}{
+				"socios": map[string]interface{}{
+					"nome":           "Maria",
+					"documentoSocio": 1,
+				},
+			},
 		},
-		{
-				"nome": "TATIANA",
-				"documentoSocio":		"123123123",
-				"valorParticipacao": "10.000.000,00",
-				"tipo": "Sócio Administrador",
-				"descricaoAdministrador": ""
-		}
-		]
-    }`)
-
-	byt2 := []byte(`{
-		"protocolo": "149123123",
-		"cnpj": "110020312312313",
-		"nomeEmpresarial": "INCORPORADORA E EMPREENDIMENTOS LTDA",
-		"naturezaJuridica": "SOCIEDADE ANONIMA FECHADA ",
-		"nire": "2923123123",
-		"arquivamento": "25/07/2014",
-		"inicioAtividade": "1988-02-18",
-		"endereco": "RUA JOSE",
-		"numero": "",
-		"bairro": "ALPHAVILLE",
-		"complemento": "",
-		"municipio": "FAKE",
-		"cep": "123123123",
-		"uf": "SC",
-		"objetoSocial": "ABCD iABCDABCDABCDABCDABCDABCDABCDABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD ABCD.",
-		"capital": "10.000.000,00",
-		"capitalIntegralizado": "10.000.000,00",
-		"microEmpresa": "Nao",
-		"prazoDuracao": "Indeterminado",
-		"situacao": "REGISTRO ATIVO",
-		"status": "",
-		"dia": 4,
-		"mes": "Setembro",
-		"ano": 2015,
-		"moedaCapital": "R$",
-		"moedaCapitalIntegralizado": "R$",
-		"socios": [
-		{
-				"nome": "MARIA",
-				"documentoSocio":		"123123123",
-				"valorParticipacao": "10.000.000,00",
-				"tipo": "Sócio Administrador",
-				"descricaoAdministrador": ""
+		"str": "a",
+		"num": 1,
+	}
+	value2 := map[string]interface{}{
+		"data": []interface{}{
+			map[string]interface{}{
+				"socios": map[string]interface{}{
+					"nome":           "Jose",
+					"documentoSocio": 2,
+				},
+			},
 		},
-		{
-				"nome": "TATIANA",
-				"documentoSocio":		"123123123",
-				"valorParticipacao": "10.000.000,00",
-				"tipo": "Sócio Administrador",
-				"descricaoAdministrador": ""
-		}
-		]
-    }`)
-
-	var f interface{}
-	var g interface{}
-	json.Unmarshal(byt, &f)
-	json.Unmarshal(byt2, &g)
-
-	expected := []string{"socios"}
-	actual := Diff(f.(map[string]interface{}), g.(map[string]interface{}))
+		"str": "a",
+		"num": 1,
+	}
+	expected := []string{"data"}
+	actual := Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
