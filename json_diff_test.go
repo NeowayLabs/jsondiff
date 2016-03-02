@@ -310,3 +310,16 @@ func TestShouldReturnFieldWhenTheElementsOfAnArrayAreJsonAndDoesNotMatch(t *test
 		t.Error("Test failed. Expected", expected, "but returned", actual)
 	}
 }
+
+func TestShouldNotExplodeWhenAFieldIsNil(t *testing.T) {
+	value := map[string]interface{}{
+		"socios": nil,
+	}
+
+	expected := []string{}
+	actual := Diff(value, value)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}

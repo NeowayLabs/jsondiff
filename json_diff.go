@@ -12,6 +12,12 @@ func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) [
 		for secondKey, secondValue := range secondJson {
 			if firstKey != secondKey {
 				continue
+			} else if firstValue == nil || secondValue == nil {
+				if firstValue == secondValue {
+					continue
+				} else {
+					jsonDiff = append(jsonDiff, firstKey)
+				}
 			} else if reflect.TypeOf(firstValue).String() == "[]string" {
 				if !compareArray(firstValue.([]string), secondValue.([]string)) {
 					jsonDiff = append(jsonDiff, firstKey)
@@ -32,13 +38,13 @@ func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) [
 	}
 
 	for firstKey := range firstJson {
-		if secondJson[firstKey] == nil {
+		if secondJson[firstKey] == nil && firstJson[firstKey] != nil {
 			jsonDiff = append(jsonDiff, firstKey)
 		}
 	}
 
 	for firstKey := range secondJson {
-		if firstJson[firstKey] == nil {
+		if firstJson[firstKey] == nil && secondJson[firstKey] != nil {
 			jsonDiff = append(jsonDiff, firstKey)
 		}
 	}
