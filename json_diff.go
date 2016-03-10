@@ -18,6 +18,8 @@ func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) [
 				} else {
 					jsonDiff = append(jsonDiff, firstKey)
 				}
+			} else if reflect.TypeOf(firstValue).String() != reflect.TypeOf(secondValue).String() {
+				jsonDiff = append(jsonDiff, firstKey)
 			} else if reflect.TypeOf(firstValue).String() == "[]string" {
 				if !compareArray(firstValue.([]string), secondValue.([]string)) {
 					jsonDiff = append(jsonDiff, firstKey)
