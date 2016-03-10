@@ -323,3 +323,21 @@ func TestShouldNotExplodeWhenAFieldIsNil(t *testing.T) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
 	}
 }
+
+func TestShouldNotExplodeWhenAFieldsAreFromDifferentType(t *testing.T) {
+	value := map[string]interface{}{
+		"socios": map[string]interface{}{
+			"a": "b",
+		},
+	}
+	value2 := map[string]interface{}{
+		"socios": "a",
+	}
+
+	expected := []string{"socios"}
+	actual := Diff(value, value2)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
