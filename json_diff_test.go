@@ -1,9 +1,10 @@
 package jsondiff
 
 import (
-	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestShouldReturnFieldWhenValuesDiffer(t *testing.T) {
@@ -298,6 +299,35 @@ func TestShouldReturnFieldWhenTheElementsOfAnArrayAreJsonAndDoesNotMatch(t *test
 					"nome":           "Jose",
 					"documentoSocio": 2,
 				},
+			},
+		},
+		"str": "a",
+		"num": 1,
+	}
+	expected := []string{"data"}
+	actual := Diff(value, value2)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
+
+func TestShouldReturnFieldWhenTheJsonHasThirdLevelAndNotMatch(t *testing.T) {
+	value := map[string]interface{}{
+		"data": map[string]interface{}{
+			"socios": map[string]interface{}{
+				"nome":           "Maria",
+				"documentoSocio": 1,
+			},
+		},
+		"str": "a",
+		"num": 1,
+	}
+	value2 := map[string]interface{}{
+		"data": map[string]interface{}{
+			"socios": map[string]interface{}{
+				"nome":           "Jose",
+				"documentoSocio": 2,
 			},
 		},
 		"str": "a",
