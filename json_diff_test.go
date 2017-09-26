@@ -3,8 +3,6 @@ package jsondiff
 import (
 	"reflect"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestShouldReturnFieldWhenValuesDiffer(t *testing.T) {
@@ -226,7 +224,7 @@ func TestShouldReturnFieldWhenTheFieldIsAJsonAndDoesNotMatch(t *testing.T) {
 	}
 }
 
-func TestShouldReturnFielsdWhenMoreThanOneFieldAreDifferent(t *testing.T) {
+func TestShouldReturnFielsdWhenMoreThanOneFieldIsDifferent(t *testing.T) {
 	value := map[string]interface{}{
 		"json": map[string]interface{}{
 			"str": "a",
@@ -246,9 +244,12 @@ func TestShouldReturnFielsdWhenMoreThanOneFieldAreDifferent(t *testing.T) {
 		"num":   2,
 	}
 
+	expected := []string{"array", "json", "num", "str"}
 	actual := Diff(value, value2)
 
-	assert.Contains(t, actual, "json", "array", "str", "num")
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
 }
 
 func TestShouldReturnEmptyWhenTheElementsOfAnArrayAreJsonAndMatch(t *testing.T) {
@@ -369,5 +370,30 @@ func TestShouldNotExplodeWhenAFieldsAreFromDifferentType(t *testing.T) {
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
+
+func BenchmarkDiff(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		value := map[string]interface{}{
+			"json": map[string]interface{}{
+				"str": "a",
+				"num": 1,
+			},
+			"array": []string{"a", "b"},
+			"str":   "a",
+			"num":   1,
+		}
+		value2 := map[string]interface{}{
+			"json": map[string]interface{}{
+				"str": "a",
+				"num": 2,
+			},
+			"array": []string{"a", "c"},
+			"str":   "b",
+			"num":   2,
+		}
+
+		Diff(value, value2)
 	}
 }

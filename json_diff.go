@@ -2,6 +2,7 @@ package jsondiff
 
 import (
 	"reflect"
+	"sort"
 )
 
 func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) []string {
@@ -51,6 +52,7 @@ func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) [
 		}
 	}
 
+	sort.Strings(jsonDiff)
 	return jsonDiff
 }
 
