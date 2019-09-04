@@ -1,0 +1,6 @@
+goos: linux
+goarch: amd64
+BenchmarkDiff-4            	  500000	      3270 ns/op	     992 B/op	      14 allocs/op
+BenchmarkDiffBigObject-4   	    1000	   1686267 ns/op	  493546 B/op	    8083 allocs/op
+PASS
+ok  	_/home/kamila/workspace/jsondiff	3.553s
