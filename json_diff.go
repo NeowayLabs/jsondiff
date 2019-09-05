@@ -1,72 +1,74 @@
 package jsondiff
 
 import (
-	"reflect"
 	"sort"
+	"strconv"
 )
 
 func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) []string {
 
-	jsonDiff := make([]string, 0)
+	changesSet := make(map[string]struct{})
+	compare(firstJson, secondJson, "", changesSet)
+	compare(secondJson, firstJson, "", changesSet)
 
-	for firstKey, firstValue := range firstJson {
-		for secondKey, secondValue := range secondJson {
-			if firstKey != secondKey {
-				continue
-			} else if firstValue == nil || secondValue == nil {
-				if firstValue == secondValue {
-					continue
-				} else {
-					jsonDiff = append(jsonDiff, firstKey)
-				}
-			} else if reflect.TypeOf(firstValue).String() != reflect.TypeOf(secondValue).String() {
-				jsonDiff = append(jsonDiff, firstKey)
-			} else if reflect.TypeOf(firstValue).String() == "[]string" {
-				if !compareArray(firstValue.([]string), secondValue.([]string)) {
-					jsonDiff = append(jsonDiff, firstKey)
-				}
-			} else if reflect.TypeOf(firstValue).String() == "[]interface {}" {
-				if !reflect.DeepEqual(firstValue, secondValue) {
-					jsonDiff = append(jsonDiff, firstKey)
-				}
-			} else if reflect.TypeOf(firstValue).String() == "map[string]interface {}" {
-				isDifferent := Diff(firstValue.(map[string]interface{}), secondValue.(map[string]interface{}))
-				if len(isDifferent) > 0 {
-					jsonDiff = append(jsonDiff, firstKey)
-				}
-			} else if firstValue != secondValue {
-				jsonDiff = append(jsonDiff, firstKey)
+	changes := make([]string, 0)
+	for key := range changesSet {
+		changes = append(changes, key)
+	}
+	sort.Strings(changes) // TODO check performance
+
+	return changes
+}
+
+func compare(firstValue, secondValue interface{}, parent string, changes map[string]struct{}) {
+
+	switch v := firstValue.(type) {
+	case map[string]interface{}:
+		if parent != "" {
+			parent = parent + "."
+		}
+		for k, value := range v {
+			switch v2 := secondValue.(type) {
+			case map[string]interface{}:
+				compare(value, v2[k], parent+k, changes)
+			default:
+				changes[parent+k] = struct{}{}
 			}
 		}
-	}
-
-	for firstKey := range firstJson {
-		if secondJson[firstKey] == nil && firstJson[firstKey] != nil {
-			jsonDiff = append(jsonDiff, firstKey)
+	case []string:
+		switch v2 := secondValue.(type) {
+		case []string:
+			equal := compareArray(v, v2)
+			if !equal {
+				changes[parent] = struct{}{}
+			}
+		default:
+			changes[parent] = struct{}{}
+		}
+	case []interface{}:
+		for k, value := range v {
+			switch v2 := secondValue.(type) {
+			case []interface{}:
+				compare(value, v2[k], parent+"["+strconv.Itoa(k)+"]", changes)
+			default:
+				changes[parent] = struct{}{}
+			}
+		}
+	default:
+		if firstValue != secondValue {
+			changes[parent] = struct{}{}
 		}
 	}
-
-	for firstKey := range secondJson {
-		if firstJson[firstKey] == nil && secondJson[firstKey] != nil {
-			jsonDiff = append(jsonDiff, firstKey)
-		}
-	}
-
-	sort.Strings(jsonDiff)
-	return jsonDiff
 }
 
 func compareArray(firstArray []string, secondArray []string) bool {
-
 	if len(firstArray) != len(secondArray) {
 		return false
 	}
-
-	for index, _ := range firstArray {
+	for index := range firstArray {
 		if firstArray[index] != secondArray[index] {
 			return false
 		}
 	}
-
 	return true
 }

@@ -218,7 +218,7 @@ func TestShouldReturnFieldWhenTheFieldIsAJsonAndDoesNotMatch(t *testing.T) {
 		},
 	}
 
-	expected := []string{"json"}
+	expected := []string{"json.num"}
 	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
@@ -246,7 +246,7 @@ func TestShouldReturnFielsdWhenMoreThanOneFieldIsDifferent(t *testing.T) {
 		"num":   2,
 	}
 
-	expected := []string{"array", "json", "num", "str"}
+	expected := []string{"array", "json.num", "num", "str"}
 	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
@@ -307,7 +307,7 @@ func TestShouldReturnFieldWhenTheElementsOfAnArrayAreJsonAndDoesNotMatch(t *test
 		"str": "a",
 		"num": 1,
 	}
-	expected := []string{"data"}
+	expected := []string{"data[0].socios.documentoSocio", "data[0].socios.nome"}
 	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
@@ -336,7 +336,7 @@ func TestShouldReturnFieldWhenTheJsonHasThirdLevelAndNotMatch(t *testing.T) {
 		"str": "a",
 		"num": 1,
 	}
-	expected := []string{"data"}
+	expected := []string{"data.socios.documentoSocio", "data.socios.nome"}
 	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
@@ -357,7 +357,7 @@ func TestShouldNotExplodeWhenAFieldIsNil(t *testing.T) {
 	}
 }
 
-func TestShouldNotExplodeWhenAFieldsAreFromDifferentType(t *testing.T) {
+func TestShouldNotExplodeWhenFieldsAreFromDifferentType(t *testing.T) {
 	value := map[string]interface{}{
 		"socios": map[string]interface{}{
 			"a": "b",
@@ -367,7 +367,7 @@ func TestShouldNotExplodeWhenAFieldsAreFromDifferentType(t *testing.T) {
 		"socios": "a",
 	}
 
-	expected := []string{"socios"}
+	expected := []string{"socios", "socios.a"}
 	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
