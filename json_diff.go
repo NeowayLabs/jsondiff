@@ -24,17 +24,7 @@ func compare(firstValue, secondValue interface{}, parent string, changes map[str
 
 	switch v := firstValue.(type) {
 	case map[string]interface{}:
-		if parent != "" {
-			parent = parent + "."
-		}
-		for k, value := range v {
-			switch v2 := secondValue.(type) {
-			case map[string]interface{}:
-				compare(value, v2[k], parent+k, changes)
-			default:
-				changes[parent+k] = struct{}{}
-			}
-		}
+		compareMap(v, secondValue, parent, changes)
 	case []string:
 		switch v2 := secondValue.(type) {
 		case []string:
@@ -46,16 +36,34 @@ func compare(firstValue, secondValue interface{}, parent string, changes map[str
 			changes[parent] = struct{}{}
 		}
 	case []interface{}:
-		for k, value := range v {
-			switch v2 := secondValue.(type) {
-			case []interface{}:
-				compare(value, v2[k], parent+"["+strconv.Itoa(k)+"]", changes)
-			default:
-				changes[parent] = struct{}{}
-			}
-		}
+		compareSlice(v, secondValue, parent, changes)
 	default:
 		if firstValue != secondValue {
+			changes[parent] = struct{}{}
+		}
+	}
+}
+
+func compareMap(v map[string]interface{}, secondValue interface{}, parent string, changes map[string]struct{}) {
+	if parent != "" {
+		parent = parent + "."
+	}
+	for k, value := range v {
+		switch v2 := secondValue.(type) {
+		case map[string]interface{}:
+			compare(value, v2[k], parent+k, changes)
+		default:
+			changes[parent+k] = struct{}{}
+		}
+	}
+}
+
+func compareSlice(v []interface{}, secondValue interface{}, parent string, changes map[string]struct{}) {
+	for k, value := range v {
+		switch v2 := secondValue.(type) {
+		case []interface{}:
+			compare(value, v2[k], parent+"["+strconv.Itoa(k)+"]", changes)
+		default:
 			changes[parent] = struct{}{}
 		}
 	}
