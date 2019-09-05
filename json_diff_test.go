@@ -374,28 +374,3 @@ func TestShouldNotExplodeWhenAFieldsAreFromDifferentType(t *testing.T) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
 	}
 }
-
-func BenchmarkDiff(b *testing.B) {
-	for n := 0; n < b.N; n++ {
-		value := map[string]interface{}{
-			"json": map[string]interface{}{
-				"str": "a",
-				"num": 1,
-			},
-			"array": []string{"a", "b"},
-			"str":   "a",
-			"num":   1,
-		}
-		value2 := map[string]interface{}{
-			"json": map[string]interface{}{
-				"str": "a",
-				"num": 2,
-			},
-			"array": []string{"a", "c"},
-			"str":   "b",
-			"num":   2,
-		}
-
-		jsondiff.Diff(value, value2)
-	}
-}
