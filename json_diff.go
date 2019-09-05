@@ -15,7 +15,7 @@ func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) [
 	for key := range changesSet {
 		changes = append(changes, key)
 	}
-	sort.Strings(changes) // TODO check performance
+	sort.Strings(changes)
 
 	return changes
 }
