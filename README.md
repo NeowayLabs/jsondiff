@@ -1,6 +1,6 @@
 # Json Diff
 
-![Go Report Card](https://goreportcard.com/report/github.com/NeowayLabs/jsondiff)](https://goreportcard.com/report/github.com/NeowayLabs/jsondiff)
+[![Go Report Card](https://goreportcard.com/badge/github.com/NeowayLabs/jsondiff)](https://goreportcard.com/report/github.com/NeowayLabs/jsondiff)
 
 ![Gopher image](img/gopher.png)
 
