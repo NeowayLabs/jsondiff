@@ -1,5 +1,12 @@
+cov=coverage.out
+covhtml=coverage.html
+
 check:
-	go test ./... -race
+	go test ./... -race -coverprofile=$(cov)
+
+coverage: check
+	go tool cover -html=$(cov) -o=$(covhtml)
+	xdg-open coverage.html
 
 bench:
 	mv bench_results.txt old_results.txt
