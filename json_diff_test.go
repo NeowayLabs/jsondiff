@@ -365,7 +365,27 @@ func TestShouldNotExplodeWhenFieldsAreFromDifferentType(t *testing.T) {
 		"socios": "a",
 	}
 
-	expected := []string{"socios", "socios.a"}
+	expected := []string{"socios"}
+	actual := Diff(value, value2)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
+
+func TestShouldReturnChangesWhenAObjectIsMissing(t *testing.T) {
+	value := map[string]interface{}{
+		"socios": map[string]interface{}{
+			"a": "b",
+			"c": "d",
+		},
+		"nome": "maria",
+	}
+	value2 := map[string]interface{}{
+		"nome": "maria",
+	}
+
+	expected := []string{"socios"}
 	actual := Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {

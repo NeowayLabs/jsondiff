@@ -45,16 +45,21 @@ func compare(firstValue, secondValue interface{}, parent string, changes map[str
 }
 
 func compareMap(v map[string]interface{}, secondValue interface{}, parent string, changes map[string]struct{}) {
-	if parent != "" {
-		parent = parent + "."
-	}
-	for k, value := range v {
-		switch v2 := secondValue.(type) {
-		case map[string]interface{}:
-			compare(value, v2[k], parent+k, changes)
-		default:
-			changes[parent+k] = struct{}{}
+
+	v2 := make(map[string]interface{})
+	switch v := secondValue.(type) {
+	case map[string]interface{}:
+		if parent != "" {
+			parent = parent + "."
 		}
+		v2 = v
+	default:
+		changes[parent] = struct{}{}
+		return
+	}
+
+	for k, value := range v {
+		compare(value, v2[k], parent+k, changes)
 	}
 }
 
