@@ -1,8 +1,10 @@
-package jsondiff
+package jsondiff_test
 
 import (
 	"encoding/json"
 	"testing"
+
+	"github.com/NeowayLabs/jsondiff"
 )
 
 func BenchmarkDiff(b *testing.B) {
@@ -26,7 +28,7 @@ func BenchmarkDiff(b *testing.B) {
 			"num":   2,
 		}
 
-		Diff(value, value2)
+		jsondiff.Diff(value, value2)
 	}
 }
 
@@ -4566,6 +4568,6 @@ func BenchmarkDiffBigObject(b *testing.B) {
 	record2["newField"] = true
 
 	for n := 0; n < b.N; n++ {
-		Diff(record1, record2)
+		jsondiff.Diff(record1, record2)
 	}
 }

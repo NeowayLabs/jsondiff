@@ -1,8 +1,10 @@
-package jsondiff
+package jsondiff_test
 
 import (
 	"reflect"
 	"testing"
+
+	"github.com/NeowayLabs/jsondiff"
 )
 
 func TestShouldReturnFieldWhenValuesDiffer(t *testing.T) {
@@ -18,7 +20,7 @@ func TestShouldReturnFieldWhenValuesDiffer(t *testing.T) {
 	}
 
 	expected := []string{"str"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -32,7 +34,7 @@ func TestShouldReturnEmptyWhenValuesMatch(t *testing.T) {
 	}
 
 	expected := []string{}
-	actual := Diff(value, value)
+	actual := jsondiff.Diff(value, value)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -44,7 +46,7 @@ func TestShouldReturnEmptyWhenValuesAreEmpty(t *testing.T) {
 	value2 := map[string]interface{}{}
 
 	expected := []string{}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -64,7 +66,7 @@ func TestShouldReturnFieldWhenTheSecondJsonHasMoreItens(t *testing.T) {
 	}
 
 	expected := []string{"bool"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -84,7 +86,7 @@ func TestShouldReturnFieldWhenTheFirstJsonHasMoreItens(t *testing.T) {
 	}
 
 	expected := []string{"bool"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -103,7 +105,7 @@ func TestShoudReturnEmptyWhenValuesMatchAndAreInDifferentOrder(t *testing.T) {
 	}
 
 	expected := []string{}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -122,7 +124,7 @@ func TestShouldReturnFieldWhenThereIsAnArrayThatIsDifferent(t *testing.T) {
 	}
 
 	expected := []string{"str"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -141,7 +143,7 @@ func TestShouldReturnFieldWhenTheSecondArrayHasDifferentElement(t *testing.T) {
 	}
 
 	expected := []string{"str"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -160,7 +162,7 @@ func TestShouldReturnFieldWhenTheElementsOfAnArrayDoesNotMatch(t *testing.T) {
 	}
 
 	expected := []string{"str"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -179,7 +181,7 @@ func TestShouldReturnEmptyWhenTheElementsOfAnArrayMatch(t *testing.T) {
 	}
 
 	expected := []string{}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -195,7 +197,7 @@ func TestShouldReturnEmptyWhenTheFieldIsAJsonAndMatch(t *testing.T) {
 	}
 
 	expected := []string{}
-	actual := Diff(value, value)
+	actual := jsondiff.Diff(value, value)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -217,7 +219,7 @@ func TestShouldReturnFieldWhenTheFieldIsAJsonAndDoesNotMatch(t *testing.T) {
 	}
 
 	expected := []string{"json.num"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -245,7 +247,7 @@ func TestShouldReturnFielsdWhenMoreThanOneFieldIsDifferent(t *testing.T) {
 	}
 
 	expected := []string{"array", "json.num", "num", "str"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -273,7 +275,7 @@ func TestShouldReturnEmptyWhenTheElementsOfAnArrayAreJsonAndMatch(t *testing.T) 
 		"num": 1,
 	}
 	expected := []string{}
-	actual := Diff(value, value)
+	actual := jsondiff.Diff(value, value)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -306,7 +308,7 @@ func TestShouldReturnFieldWhenTheElementsOfAnArrayAreJsonAndDoesNotMatch(t *test
 		"num": 1,
 	}
 	expected := []string{"data[0].socios.documentoSocio", "data[0].socios.nome"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -335,7 +337,7 @@ func TestShouldReturnFieldWhenTheJsonHasThirdLevelAndNotMatch(t *testing.T) {
 		"num": 1,
 	}
 	expected := []string{"data.socios.documentoSocio", "data.socios.nome"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -348,7 +350,7 @@ func TestShouldNotExplodeWhenAFieldIsNil(t *testing.T) {
 	}
 
 	expected := []string{}
-	actual := Diff(value, value)
+	actual := jsondiff.Diff(value, value)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -366,7 +368,7 @@ func TestShouldNotExplodeWhenFieldsAreFromDifferentType(t *testing.T) {
 	}
 
 	expected := []string{"socios"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
@@ -386,7 +388,7 @@ func TestShouldReturnChangesWhenAObjectIsMissing(t *testing.T) {
 	}
 
 	expected := []string{"socios"}
-	actual := Diff(value, value2)
+	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
 		t.Error("Test failed. Expected", expected, "but returned", actual)
