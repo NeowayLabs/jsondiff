@@ -318,61 +318,25 @@ func TestShouldReturnFieldWhenTheElementsOfAnArrayAreJsonAndDoesNotMatch(t *test
 func TestShouldReturnFieldWhenTheLenghtOfAnJsonArrayDoesNotMatch(t *testing.T) {
 	value := map[string]interface{}{
 		"data": map[string]interface{}{
-			"sancoes": []interface{}{map[string]interface{}{
-				"tipoSancao":       "tipoSancaoTreated",
-				"detalhamento":     "detalhamentoTreated",
-				"abrangencia":      "abrangenciaTreated",
-				"dataInformacao":   "2006-01-02 15:04:05",
-				"nomeFantasia":     "nomeFantasiaTreated",
-				"razaoSocial":      "razaoSocialTreated",
-				"nome":             "nomeInformadoOrgaoSancionadorTreated",
-				"origemInformacao": "origemInformacaoTreated",
-				"uf":               "ufTreated",
-				"processo":         "processoTreated",
-				"orgaoSancionador": "orgaoSancionadorTreated",
-				"periodoSancao": map[string]interface{}{
-					"inicio": "2006-01-02 15:04:05",
-					"final":  "2006-01-02 15:04:05",
+			"socios": []interface{}{
+				map[string]interface{}{
+					"nome":           "Maria",
+					"documentoSocio": 1,
 				},
-			}, map[string]interface{}{
-				"tipoSancao":       "tipoSancaoTreated2",
-				"detalhamento":     "detalhamentoTreated2",
-				"abrangencia":      "abrangenciaTreated2",
-				"dataInformacao":   "2006-01-02 15:04:05",
-				"nomeFantasia":     "nomeFantasiaTreated2",
-				"razaoSocial":      "razaoSocialTreated2",
-				"nome":             "nomeInformadoOrgaoSancionadorTreated2",
-				"origemInformacao": "origemInformacaoTreated2",
-				"uf":               "ufTreated2",
-				"processo":         "processoTreated2",
-				"orgaoSancionador": "orgaoSancionadorTreated2",
-				"periodoSancao": map[string]interface{}{
-					"inicio": "2006-01-02 15:04:05",
-					"final":  "2006-01-02 15:04:05",
-				},
-			},
 			},
 		},
 	}
 	value2 := map[string]interface{}{
 		"data": map[string]interface{}{
-			"sancoes": []interface{}{map[string]interface{}{
-				"tipoSancao":       "tipoSancaoTreated",
-				"detalhamento":     "detalhamentoTreated",
-				"abrangencia":      "abrangenciaTreated",
-				"dataInformacao":   "2006-01-02 15:04:05",
-				"nomeFantasia":     "nomeFantasiaTreated",
-				"razaoSocial":      "razaoSocialTreated",
-				"nome":             "nomeInformadoOrgaoSancionadorTreated",
-				"origemInformacao": "origemInformacaoTreated",
-				"uf":               "ufTreated",
-				"processo":         "processoTreated",
-				"orgaoSancionador": "orgaoSancionadorTreated",
-				"periodoSancao": map[string]interface{}{
-					"inicio": "2006-01-02 15:04:05",
-					"final":  "2006-01-02 15:04:05",
+			"socios": []interface{}{
+				map[string]interface{}{
+					"nome":           "Maria",
+					"documentoSocio": 1,
 				},
-			},
+				map[string]interface{}{
+					"nome":           "Joao",
+					"documentoSocio": 2,
+				},
 			},
 		},
 	}
