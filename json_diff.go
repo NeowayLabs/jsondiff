@@ -67,7 +67,11 @@ func compareSlice(v []interface{}, secondValue interface{}, parent string, chang
 	for k, value := range v {
 		switch v2 := secondValue.(type) {
 		case []interface{}:
-			compare(value, v2[k], parent+"["+strconv.Itoa(k)+"]", changes)
+			if len(v) != len(v2) {
+				changes[parent] = struct{}{}
+			} else {
+				compare(value, v2[k], parent+"["+strconv.Itoa(k)+"]", changes)
+			}
 		default:
 			changes[parent] = struct{}{}
 		}
