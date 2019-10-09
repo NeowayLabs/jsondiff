@@ -315,6 +315,39 @@ func TestShouldReturnFieldWhenTheElementsOfAnArrayAreJsonAndDoesNotMatch(t *test
 	}
 }
 
+func TestShouldReturnFieldWhenTheLenghtOfAnJsonArrayDoesNotMatch(t *testing.T) {
+	value := map[string]interface{}{
+		"data": map[string]interface{}{
+			"socios": []interface{}{
+				map[string]interface{}{
+					"nome":           "Maria",
+					"documentoSocio": 1,
+				},
+			},
+		},
+	}
+	value2 := map[string]interface{}{
+		"data": map[string]interface{}{
+			"socios": []interface{}{
+				map[string]interface{}{
+					"nome":           "Maria",
+					"documentoSocio": 1,
+				},
+				map[string]interface{}{
+					"nome":           "Joao",
+					"documentoSocio": 2,
+				},
+			},
+		},
+	}
+	expected := []string{"data.socios"}
+	actual := jsondiff.Diff(value, value2)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
+
 func TestShouldReturnFieldWhenTheJsonHasThirdLevelAndNotMatch(t *testing.T) {
 	value := map[string]interface{}{
 		"data": map[string]interface{}{
