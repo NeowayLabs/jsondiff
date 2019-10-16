@@ -1,10 +1,16 @@
+// Package jsondiff provides comparing for json maps.
 package jsondiff
 
 import (
 	"sort"
 	"strconv"
+	"strings"
 )
 
+const rootPath string = ""
+
+// Diff compare two jsons map and returns the fields names that has been changed.
+// If the jsons match the return value will be empty.
 func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) []string {
 
 	changesSet := make(map[string]struct{})
@@ -18,6 +24,71 @@ func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) [
 	sort.Strings(changes)
 
 	return changes
+}
+
+// DiffWithValues compare two jsons map and returns the fields names and values that has been changed.
+// If no diff, all return values will be empty. Else
+// diff will have changed field names list,
+// FirstValues will have changed values from firstJson and
+// SecondValues will have changed values from secondJson.
+func DiffWithValues(firstJson map[string]interface{}, secondJson map[string]interface{}) (diff []string, firstValues map[string]interface{}, secondValues map[string]interface{}) {
+	diff = Diff(firstJson, secondJson)
+	firstValues = keepDiffFields(firstJson, diff)
+	secondValues = keepDiffFields(secondJson, diff)
+	return diff, firstValues, secondValues
+}
+
+func keepDiffFields(jsonMap map[string]interface{}, diffFields []string) map[string]interface{} {
+	allowedFieldsSet := make(map[string]struct{})
+	for _, f := range diffFields {
+		allowedFieldsSet[f] = struct{}{}
+	}
+	diff := copyMap(jsonMap)
+	removeNotAllowedFieldsFromPath(diff, rootPath, allowedFieldsSet)
+	return diff
+}
+
+func copyMap(m map[string]interface{}) map[string]interface{} {
+	cp := make(map[string]interface{})
+	for k, v := range m {
+		if vm, ok := v.(map[string]interface{}); ok {
+			cp[k] = copyMap(vm)
+			continue
+		}
+		cp[k] = v
+	}
+
+	return cp
+}
+
+func removeNotAllowedFieldsFromPath(data map[string]interface{}, path string, allowedFields map[string]struct{}) {
+	for k, v := range data {
+		field := path + k
+		if _, exists := allowedFields[field]; exists {
+			continue
+		}
+		if !hasSubFieldAllowed(allowedFields, field) {
+			delete(data, k)
+			continue
+		}
+		switch value := v.(type) {
+		case map[string]interface{}:
+			currentPath := field + "."
+			removeNotAllowedFieldsFromPath(value, currentPath, allowedFields)
+			if len(value) == 0 {
+				delete(data, k)
+			}
+		}
+	}
+}
+
+func hasSubFieldAllowed(allowedField map[string]struct{}, parentField string) bool {
+	for field := range allowedField {
+		if strings.HasPrefix(field, parentField+".") {
+			return true
+		}
+	}
+	return false
 }
 
 func compare(firstValue, secondValue interface{}, parent string, changes map[string]struct{}) {
