@@ -1,0 +1,11 @@
+benchmark                    old ns/op     new ns/op     delta
+BenchmarkDiff-4              2694          1544          -42.69%
+BenchmarkDiffBigObject-4     955048        805467        -15.66%
+
+benchmark                    old allocs     new allocs     delta
+BenchmarkDiff-4              18             10             -44.44%
+BenchmarkDiffBigObject-4     11611          11611          +0.00%
+
+benchmark                    old bytes     new bytes     delta
+BenchmarkDiff-4              992           192           -80.65%
+BenchmarkDiffBigObject-4     171737        171704        -0.02%
