@@ -7,8 +7,6 @@ import (
 	"strings"
 )
 
-const rootPath string = ""
-
 // Diff compare two jsons map and returns the fields names that has been changed.
 // If the jsons match the return value will be empty.
 func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) []string {
@@ -39,6 +37,7 @@ func DiffWithValues(firstJson map[string]interface{}, secondJson map[string]inte
 }
 
 func keepDiffFields(jsonMap map[string]interface{}, diffFields []string) map[string]interface{} {
+	const rootPath string = ""
 	allowedFieldsSet := make(map[string]struct{})
 	for _, f := range diffFields {
 		allowedFieldsSet[f] = struct{}{}
