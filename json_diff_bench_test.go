@@ -9,32 +9,60 @@ import (
 
 func BenchmarkDiff(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		value := map[string]interface{}{
-			"json": map[string]interface{}{
-				"str": "a",
-				"num": 1,
-			},
-			"array": []string{"a", "b"},
-			"str":   "a",
-			"num":   1,
-		}
-		value2 := map[string]interface{}{
-			"json": map[string]interface{}{
-				"str": "a",
-				"num": 2,
-			},
-			"array": []string{"a", "c"},
-			"str":   "b",
-			"num":   2,
-		}
-
-		jsondiff.Diff(value, value2)
+		jsondiff.Diff(valueSmall, valueSmall2)
 	}
 }
 
 func BenchmarkDiffBigObject(b *testing.B) {
+	record1 := make(map[string]interface{})
+	_ = json.Unmarshal(valueBig, &record1)
+	record2 := make(map[string]interface{})
+	_ = json.Unmarshal(valueBig, &record2)
+	record2["newField"] = true
 
-	value := []byte(`{
+	for n := 0; n < b.N; n++ {
+		jsondiff.Diff(record1, record2)
+	}
+}
+
+func BenchmarkDiffWithValues(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		jsondiff.DiffWithValues(valueSmall, valueSmall2)
+	}
+}
+
+func BenchmarkDiffWithValuesBigObject(b *testing.B) {
+	record1 := make(map[string]interface{})
+	_ = json.Unmarshal(valueBig, &record1)
+	record2 := make(map[string]interface{})
+	_ = json.Unmarshal(valueBig, &record2)
+	record2["newField"] = true
+
+	for n := 0; n < b.N; n++ {
+		jsondiff.DiffWithValues(record1, record2)
+	}
+}
+
+var valueSmall = map[string]interface{}{
+	"json": map[string]interface{}{
+		"str": "a",
+		"num": 1,
+	},
+	"array": []string{"a", "b"},
+	"str":   "a",
+	"num":   1,
+}
+var valueSmall2 = map[string]interface{}{
+	"json": map[string]interface{}{
+		"str": "a",
+		"num": 2,
+	},
+	"array": []string{"a", "c"},
+	"str":   "b",
+	"num":   2,
+}
+
+var valueBig = []byte(`{
 		"_id": "5d6fe6785458e1c325320a20",
 		"index": 0,
 		"guid": "3a21e660-980d-4b57-8ea3-0d0ea9968d68",
@@ -4560,14 +4588,3 @@ func BenchmarkDiffBigObject(b *testing.B) {
 		"greeting": "Hello, Corina Mcgowan! You have 4 unread messages.",
 		"favoriteFruit": "banana"
 	  }`)
-
-	record1 := make(map[string]interface{})
-	_ = json.Unmarshal(value, &record1)
-	record2 := make(map[string]interface{})
-	_ = json.Unmarshal(value, &record2)
-	record2["newField"] = true
-
-	for n := 0; n < b.N; n++ {
-		jsondiff.Diff(record1, record2)
-	}
-}

@@ -1,6 +1,9 @@
 goos: linux
 goarch: amd64
-BenchmarkDiff-4            	  500000	      2694 ns/op	     992 B/op	      18 allocs/op
-BenchmarkDiffBigObject-4   	    2000	    955048 ns/op	  171737 B/op	   11611 allocs/op
+pkg: github.com/NeowayLabs/jsondiff
+BenchmarkDiff-4                      	 1000000	      1544 ns/op	     192 B/op	      10 allocs/op
+BenchmarkDiffBigObject-4             	    2000	    805467 ns/op	  171704 B/op	   11611 allocs/op
+BenchmarkDiffWithValues-4            	  300000	      4201 ns/op	    1552 B/op	      20 allocs/op
+BenchmarkDiffWithValuesBigObject-4   	    2000	    818760 ns/op	  176180 B/op	   11620 allocs/op
 PASS
-ok  	_/home/kamila/workspace/jsondiff	3.404s
+ok  	github.com/NeowayLabs/jsondiff	6.292s
