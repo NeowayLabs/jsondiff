@@ -41,11 +41,18 @@ func keepDiffFields(jsonMap map[string]interface{}, diffFields []string) map[str
 	const rootPath string = ""
 	allowedFieldsSet := make(map[string]struct{})
 	for _, f := range diffFields {
-		allowedFieldsSet[f] = struct{}{}
+		allowedFieldsSet[mainNameIfArray(f)] = struct{}{}
 	}
 	diff := copyMap(jsonMap)
 	removeNotAllowedFieldsFromPath(diff, rootPath, allowedFieldsSet)
 	return diff
+}
+
+func mainNameIfArray(fieldName string) string {
+	if index := strings.Index(fieldName, "["); index > 0 {
+		return fieldName[:index]
+	}
+	return fieldName
 }
 
 func copyMap(m map[string]interface{}) map[string]interface{} {
