@@ -8,7 +8,7 @@ import (
 )
 
 // Diff compare two jsons map and returns the fields names that has been changed.
-// If the jsons match the return value will be empty.
+// If input maps are equal, all return values will be empty.
 func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) []string {
 
 	changesSet := make(map[string]struct{})
@@ -25,10 +25,11 @@ func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) [
 }
 
 // DiffWithValues compare two jsons map and returns the fields names and values that has been changed.
-// If no diff, all return values will be empty. Else
-// diff will have changed field names list,
-// FirstValues will have changed values from firstJson and
-// SecondValues will have changed values from secondJson.
+// If input maps are equal, all return values will be empty.
+// Otherwise diff slice will contain the field names list,
+// those field names will also be present in FirstValues
+// and SecondValues combined with their respective
+// values from firstJson and secondJson.
 func DiffWithValues(firstJson map[string]interface{}, secondJson map[string]interface{}) (diff []string, firstValues map[string]interface{}, secondValues map[string]interface{}) {
 	diff = Diff(firstJson, secondJson)
 	firstValues = keepDiffFields(firstJson, diff)
