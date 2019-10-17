@@ -10,6 +10,6 @@ coverage: check
 
 bench:
 	mv bench_results.txt old_results.txt
-	go test -bench=. ./... -benchmem | tee bench_results.txt
+	GOMAXPROCS=4 go test -bench=. ./... -benchmem | tee bench_results.txt
 	benchcmp old_results.txt bench_results.txt |tee bench_diff.txt
 	rm old_results.txt
