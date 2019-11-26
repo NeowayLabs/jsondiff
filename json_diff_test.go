@@ -27,6 +27,39 @@ func TestShouldReturnFieldWhenValuesDiffer(t *testing.T) {
 	}
 }
 
+func TestDiffShouldReturnEmptyWhenArrayMatchButTypeIsDiffBeforeUnmarshal(t *testing.T) {
+
+	value := map[string]interface{}{
+		"num": 5.10,
+		"list": []interface{}{
+			map[string]interface{}{
+				"str": "a",
+			},
+			map[string]interface{}{
+				"str": "b",
+			},
+		},
+	}
+	value2 := map[string]interface{}{
+		"num": 5.10,
+		"list": []map[string]interface{}{
+			{
+				"str": "a",
+			},
+			{
+				"str": "b",
+			},
+		},
+	}
+
+	expected := []string{}
+	actual := jsondiff.Diff(value, value2)
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Error("Test failed. Expected", expected, "but returned", actual)
+	}
+}
+
 func TestShouldReturnEmptyWhenValuesMatch(t *testing.T) {
 	value := map[string]interface{}{
 		"num": 6.13,
@@ -142,7 +175,7 @@ func TestShouldReturnFieldWhenTheSecondArrayHasDifferentElement(t *testing.T) {
 		"num": 6.13,
 	}
 
-	expected := []string{"str"}
+	expected := []string{"str[1]"}
 	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
@@ -161,7 +194,7 @@ func TestShouldReturnFieldWhenTheElementsOfAnArrayDoesNotMatch(t *testing.T) {
 		"num": 6.13,
 	}
 
-	expected := []string{"str"}
+	expected := []string{"str[1]"}
 	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
@@ -246,7 +279,7 @@ func TestShouldReturnFielsdWhenMoreThanOneFieldIsDifferent(t *testing.T) {
 		"num":   2,
 	}
 
-	expected := []string{"array", "json.num", "num", "str"}
+	expected := []string{"array[1]", "json.num", "num", "str"}
 	actual := jsondiff.Diff(value, value2)
 
 	if !reflect.DeepEqual(expected, actual) {
@@ -673,6 +706,48 @@ func TestShouldReturnEmptyOldAndNewValuesWhenDoesNotHasDiff(t *testing.T) {
 	expectedNew := map[string]interface{}{}
 
 	actualDiff, actualOld, actualNew := jsondiff.DiffWithValues(value, value)
+
+	if !reflect.DeepEqual(expectedDiff, actualDiff) {
+		t.Error("Test failed. Expected", expectedDiff, "but returned", actualDiff)
+	}
+	if !reflect.DeepEqual(expectedOld, actualOld) {
+		t.Error("Test failed. Expected", expectedOld, "but returned", actualOld)
+	}
+	if !reflect.DeepEqual(expectedNew, actualNew) {
+		t.Error("Test failed. Expected", expectedNew, "but returned", actualNew)
+	}
+}
+
+func TestDiffWithValuesShouldReturnEmptyWhenArrayMatchButTypeIsDiffBeforeUnmarshal(t *testing.T) {
+
+	value := map[string]interface{}{
+		"num": 5.10,
+		"list": []interface{}{
+			map[string]interface{}{
+				"str": "a",
+			},
+			map[string]interface{}{
+				"str": "b",
+			},
+		},
+	}
+	value2 := map[string]interface{}{
+		"num": 5.10,
+		"list": []map[string]interface{}{
+			{
+				"str": "a",
+			},
+			{
+				"str": "b",
+			},
+		},
+	}
+
+	expectedDiff := []string{}
+	expectedOld := map[string]interface{}{}
+	expectedNew := map[string]interface{}{}
+
+	actualDiff, actualOld, actualNew := jsondiff.DiffWithValues(value, value2)
 
 	if !reflect.DeepEqual(expectedDiff, actualDiff) {
 		t.Error("Test failed. Expected", expectedDiff, "but returned", actualDiff)
