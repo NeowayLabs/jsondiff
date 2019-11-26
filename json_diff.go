@@ -2,6 +2,7 @@
 package jsondiff
 
 import (
+	"encoding/json"
 	"sort"
 	"strconv"
 	"strings"
@@ -10,10 +11,12 @@ import (
 // Diff compare two jsons map and returns the fields names that has been changed.
 // If input maps are equal, all return values will be empty.
 func Diff(firstJson map[string]interface{}, secondJson map[string]interface{}) []string {
+	firstJsonCopy := copyMapByte(firstJson)
+	secondJsonCopy := copyMapByte(secondJson)
 
 	changesSet := make(map[string]struct{})
-	compare(firstJson, secondJson, "", changesSet)
-	compare(secondJson, firstJson, "", changesSet)
+	compare(firstJsonCopy, secondJsonCopy, "", changesSet)
+	compare(secondJsonCopy, firstJsonCopy, "", changesSet)
 
 	changes := make([]string, 0)
 	for key := range changesSet {
@@ -66,6 +69,15 @@ func copyMap(m map[string]interface{}) map[string]interface{} {
 	}
 
 	return cp
+}
+
+func copyMapByte(m map[string]interface{}) map[string]interface{} {
+	copy := make(map[string]interface{})
+	if len(m) > 0 {
+		dataJson, _ := json.Marshal(m)
+		_ = json.Unmarshal(dataJson, &copy)
+	}
+	return copy
 }
 
 func removeNotAllowedFieldsFromPath(data map[string]interface{}, path string, allowedFields map[string]struct{}) {
